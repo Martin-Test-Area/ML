@@ -62,7 +62,8 @@ results2==labels[76:150]
 
 
 
-# Split data randomisd
+# Split data randomisd  # Look at caret for k-fold training datasets
+# https://stackoverflow.com/questions/33470373/applying-k-fold-cross-validation-model-using-caret-package
 library(dplyr)
 set.seed(100)
 data.train=sample_frac(iris,0.5)
@@ -71,3 +72,13 @@ data.test <- iris[-iris_index,]
 labels3=data.train[,5]
 results3=knn(train = data.train[,1:4],test = data.test[,1:4],cl=labels3,k=3)
 results3==data.test[,5]
+
+# Caret and cross fold
+
+library(caret)
+train_control<- trainControl(method="cv", number=5, savePredictions = TRUE)
+model<- train(Species~., data=data.train, trControl=train_control, method="knn")
+model$pred
+
+resultscv=predict(model,newdata=data.test,type="raw")
+resultscv==iris[76:150,5]
