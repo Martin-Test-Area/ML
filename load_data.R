@@ -1,6 +1,6 @@
 
 
-setwd("~/teaching/P08820-IntroMachineLearning/r")
+#setwd("~/teaching/P08820-IntroMachineLearning/r")
 
 # Load the MNIST digit recognition dataset into R
 # http://yann.lecun.com/exdb/mnist/
@@ -30,12 +30,12 @@ load_mnist <- function() {
     close(f)
     y
   }
-  train <<- load_image_file('mnist/train-images-idx3-ubyte')
-  test <<- load_image_file('mnist/t10k-images-idx3-ubyte')
+  train <<- load_image_file('data/mnist/train-images-idx3-ubyte')
+  test <<- load_image_file('data/mnist/t10k-images-idx3-ubyte')
   
-  train$y <<- load_label_file('mnist/train-labels-idx1-ubyte')
-  test$y <<- load_label_file('mnist/t10k-labels-idx1-ubyte')  
-  
+  train$y <<- load_label_file('data/mnist/train-labels-idx1-ubyte')
+  test$y <<- load_label_file('data/mnist/t10k-labels-idx1-ubyte')  
+}  
   
   show_digit <- function(arr784, col=gray(12:1/12), ...) {
     image(matrix(arr784, nrow=28)[,28:1], col=col, ...)
@@ -60,3 +60,4 @@ load_mnist <- function() {
   # some pixels correlate very strongly, other don't
   C <- cov(train$x)
   image(C)
+  
