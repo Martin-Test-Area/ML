@@ -1,0 +1,18 @@
+---
+title: "report test"
+author: "Martin Duggan"
+date: "28/01/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#Introduction to Machine Learning
+The general classification problem is a major issue which machine learning ….
+
+When creating models it is standard procedure to have a separate training and test dataset…
+
+The MNIST dataset contains information on handwritten digits. Each digit is stored as individual matrixs. This is a good example of the general classification problem as ….
