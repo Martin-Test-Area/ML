@@ -30,11 +30,11 @@ load_mnist <- function() {
     close(f)
     y
   }
-  train <<- load_image_file('data/mnist/train-images-idx3-ubyte')
-  test <<- load_image_file('data/mnist/t10k-images-idx3-ubyte')
+  train <<- load_image_file('Data/MNIST-data/train-images-idx3-ubyte')
+  test <<- load_image_file('Data/MNIST-data/t10k-images-idx3-ubyte')
   
-  train$y <<- load_label_file('data/mnist/train-labels-idx1-ubyte')
-  test$y <<- load_label_file('data/mnist/t10k-labels-idx1-ubyte')  
+  train$y <<- load_label_file('Data/MNIST-data/train-labels-idx1-ubyte')
+  test$y <<- load_label_file('Data/MNIST-data/t10k-labels-idx1-ubyte')  
 }  
   
   show_digit <- function(arr784, col=gray(12:1/12), ...) {
