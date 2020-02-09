@@ -10,16 +10,20 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# Introduction to Machine Learning
+# Introduction to Machine Learning: MNIST written character classification
 1.1 
-We can use machine learning to help solve many different types of problems. One problem machine learning can be useful in solving is the classification problem. This is the problem of identifying which set of categories a new observation belongs to. 
+We can use machine learning to help solve many different types of problems. One problem machine learning can be useful in solving is the classification problem. This is the problem of identifying which set of categories a new observation belongs to. This has many useful applications in the real world such as classifying emails as either spam, or not spam. 
 
-### Potentially give some examples e.g. spam email, blood tests, or MNIST data set...
+
 
 1.2 
 
+In order to classify new observations you need to use a supervised learning algorithm. This is where we use a training dataset to learn the relationship between the variables and our label before applying this relationship (algorithm) to the new obserations. When we're creating our supervised learning algorithm we split our dataset up into a training dataset and a test dataset. We seperate the data then we have one dataset to train/build are algorithm and another so we can test our model. It is important that we don't train are model on test data becuase this will cause bias in our testing and will artifially increasing the accuracy of our test.
 
-When creating models it is standard procedure to have a separate training and test dataset…
+# Add something about size of test and training data. also about how data needs to be different to avoid bias (such as with histogram of labels...)
 
 1.3 
-The MNIST dataset contains information on handwritten digits. Each digit is stored as individual matrixs. This is a good example of the general classification problem as ….
+The MNIST dataset contains information on handwritten digits from 0-9. Each digit is store as individual 28x28 matrix where each element is scaled between 0 and 255, where 0 indicates blank square (no hand writing) and 255 is a filled square (hand writing). This is a useful dataset where the classification problems comes into play. Here we have 784 (28^2) variables which we can classify as one of 10 labels (0-9). 
+# Add something about test and training datasets
+
+
