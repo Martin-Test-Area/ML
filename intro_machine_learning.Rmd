@@ -10,9 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-#Introduction to Machine Learning
-The general classification problem is a major issue which machine learning ….
+# Introduction to Machine Learning
+1.1 
+We can use machine learning to help solve many different types of problems. One problem machine learning can be useful in solving is the classification problem. This is the problem of identifying which set of categories a new observation belongs to. 
+
+### Potentially give some examples e.g. spam email, blood tests, or MNIST data set...
+
+1.2 
+
 
 When creating models it is standard procedure to have a separate training and test dataset…
 
+1.3 
 The MNIST dataset contains information on handwritten digits. Each digit is stored as individual matrixs. This is a good example of the general classification problem as ….
