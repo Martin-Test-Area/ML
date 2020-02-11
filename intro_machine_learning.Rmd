@@ -23,7 +23,7 @@ In order to classify new observations you need to use a supervised learning algo
 # Add something about size of test and training data. also about how data needs to be different to avoid bias (such as with histogram of labels...)
 
 1.3 
-The MNIST dataset contains information on handwritten digits from 0-9. Each digit is store as individual 28x28 matrix where each element is scaled between 0 and 255, where 0 indicates blank square (no hand writing) and 255 is a filled square (hand writing). This is a useful dataset where the classification problems comes into play. Here we have 784 (28^2) variables which we can classify as one of 10 labels (0-9). 
+The MNIST dataset contains information on handwritten digits from 0-9. Each digit is store as individual 28x28 matrix where each element is scaled between 0 and 255, where 0 indicates blank square (no hand writing) and 255 is a filled square (hand writing). This is a useful dataset where the classification problems comes into play. Here we have 784 (28^2) variables which we can classify as one of 10 labels (0-9). The dataset is also quite large at 60,000 obersvations which means we can have a good sized training and test dataset which allows us to build and sufficiently test out model.
 # Add something about test and training datasets
 
 
