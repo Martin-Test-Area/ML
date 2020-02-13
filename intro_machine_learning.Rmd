@@ -2,7 +2,7 @@
 title: "report test"
 author: "Martin Duggan"
 date: "28/01/2020"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -27,6 +27,17 @@ The MNIST dataset contains information on handwritten digits from 0-9. Each digi
 
 2.
 
-Due to the size of the dataset it can take a long time to perform analysis on the dataset. This is partly due to the large number of variables. To speed up and make analysis on this dataset viable we can apply dimension reduction. This is where we reduce the number of variables (dimensions) to increase the speed of computation. The aim is to reduce the number of variables whilst maintaining or keeping as much variation in the data as possible. We are going to reduce the dimensions using Principal Componant Analysis (PCA). This is where we orthogonally transform our data based on eigen-vectors. This is set out so the first few principal componants contain most of the variation (information) and the later principal componants contain the least variation. This allows us to reduce the dimensions to the first n variables (dimensions) without loosing much variation (information). # Add bit about scaling and centering
-The general concensus is that you want your principal componants to contain at least 80% of the variation in the data but this may be higher. PCA is reversible which allows us to go back from our reduced dimension dataset back to our orginal matrix. This can be very useful in seeing the affects reducing our dimensions has. As you can see below we have test 3 different dimension reduced datasets (70%, 80% and 90% of variance explained) and compared them to the orginal.
+Due to the size of the dataset it can take a long time to perform analysis on the dataset. This is partly due to the large number of variables. To speed up and make analysis on this dataset viable we can apply dimension reduction. This is where we reduce the number of variables (dimensions) to increase the speed of computation. The aim is to reduce the number of variables whilst maintaining or keeping as much variation in the data as possible. We are going to reduce the dimensions using Principal Componant Analysis (PCA). This is where we orthogonally transform our data based on eigen-vectors. This is set out so the first few principal componants contain most of the variation (information) and the later principal componants contain the least variation. This allows us to reduce the dimensions to the first n variables (dimensions) without loosing much variation (information). When performing PCA we have options to scale and center are PC coordinates. Centering moves your coordinates from the origin to the center of the centroid, this doesn't change the analysis but it can make it easier to understand your new PCA dataset. For this reason we have centered are PCA on the MNIST dataset. Scaling can alter your analysis quite a lot. Scaling normalises the distances between the dimensions, by streching the dimensions. This can be useful when your dimensions very wildly. For instance if one dimension varies between 0-5 and another dimension varies between 0-100, if you don't scale the axises the smaller axis will be underepresented and it will put more emphasis on the larger dimension for your categorisation. But by scaling the axis you can give equal important to each dimension. The general concensus is that you want your principal componants to contain at least 80% of the variation in the data but this may be higher. 
+![](PCA_1.png)
+
+Above we can see when we plot the cumulative proportion of varience explained against dimensions that we need 44 dimensions to explain 80% of the variance. To get a get balance between number of dimensions and porportion of variance explain it is often a good balance to go for the "elbow" of the curve, we can see on the plot above this is around 90% of 87 dimensions (see chart below).
+
+| % of variance explained | 70%  | 80%  | 90% |
+| ------------- |:-------------:| :-----:| --------:|
+| Number of dimensions| 26 | 44 | 87 |
+
+
+PCA is reversible which allows us to go back from our reduced dimension dataset back to our orginal matrix. This can be very useful in seeing the affects reducing our dimensions has. As you can see below we have test 3 different dimension reduced datasets (70%, 80% and 90% of variance explained) and compared them to the orginal.
+![](PCA_2.png)
+
 

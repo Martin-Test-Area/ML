@@ -97,7 +97,7 @@ Xhat3.3$pred="70%"
 train3$pred="Real"
 train4=rbind(train3,Xhat.3,Xhat2.3,Xhat3.3)
 
-ggplot(train4,aes(x=x2,y=y2,fill=Freq))+geom_tile()+facet_grid(id~pred)+scale_fill_gradient(low="white",high="black")
+ggplot(train4,aes(x=x2,y=y2,fill=Freq))+geom_tile()+facet_grid(id~pred)+scale_fill_gradient(low="white",high="black")+labs(x="",y="",fill="Colour",title="Dimensionaly reduced MNIST dataset",subtitle = "Reconstructed for the first 10 values")
 
 
 # compare the average against the average predicted version (0-9)
