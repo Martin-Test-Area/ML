@@ -34,7 +34,7 @@ ggplot(Cumulative,aes(x=Dimensions,y=100*`Cumulative.Proportion`))+
 # Lowest number of dimensionsf for this is 44.
 numComponents=44 #80%
 numComponents2=87  # 90%
-numComponents3=26  # 95%
+numComponents3=26  # 70%
 
 Xhat = t(t(train.pca$x[,1:numComponents]
            %*%
