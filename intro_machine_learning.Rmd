@@ -37,7 +37,7 @@ Above we can see when we plot the cumulative proportion of varience explained ag
 | Number of dimensions| 26 | 44 | 87 |
 
 
-PCA is reversible which allows us to go back from our reduced dimension dataset back to our orginal matrix. This can be very useful in seeing the affects reducing our dimensions has. As you can see below we have test 3 different dimension reduced datasets (70%, 80% and 90% of variance explained) and compared them to the orginal.
+PCA is reversible (through matrix multipulcation see R code) which allows us to go back from our reduced dimension dataset back to our orginal matrix. This can be very useful in seeing the affects reducing our dimensions has. As you can see below we have test 3 different dimension reduced datasets (70%, 80% and 90% of variance explained) and compared them to the orginal.
 ![](PCA_2.png)
 
-
+As you can see from the plot above the pictures hold up well as we reduce the amount of variance explained. At 70% the digits starts becoming too blurred to tell digits apart, but at 80% the digits looks similar to the orginal. When using the 80% dataset we have reduced the number of variables from 784 to 44 whilst getting a similar level of detail. This massively reduces the amount of computation power and storage need for us to perform our analysis.
