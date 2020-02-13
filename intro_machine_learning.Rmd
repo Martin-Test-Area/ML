@@ -2,7 +2,7 @@
 title: "report test"
 author: "Martin Duggan"
 date: "28/01/2020"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
