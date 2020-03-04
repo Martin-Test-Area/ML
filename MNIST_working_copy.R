@@ -150,3 +150,48 @@ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw
  ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()#+facet_grid(~type)
  
  
+
+# Next part.... -----------------------------------------------------------
+
+library(e1071) 
+yTable=table(train$y)
+percentage=round(100*yTable/sum(yTable))
+labels=paste0(row.names(yTable),"(",percentage,"%)")
+pie(yTable,labels=labels,main="Total Number of Digits (training set)")
+
+train2=train
+train2$y=as.factor(train2$y)
+train2[['n']]=NULL
+train3=as.data.frame(train2$x)
+model.naiveBayes <- naiveBayes(train2$y ~ ., data=train3) 
+summary(model.naiveBayes) 
+
+prediction.naiveBayes=predict(model.naiveBayes,newdata=test$x)
+table(`Actual Class`=test$y,`Predicted Class`=prediction.naiveBayes)
+
+
+Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes))==test$y,na.rm=T)/length(prediction.naiveBayes==test$y)
+
+
+##   Now with PCA
+
+train.pca = prcomp(train$x)
+
+train2=train
+train2$y=as.factor(train2$y)
+train2[['n']]=NULL
+train3=as.data.frame(train.pca$x[,1:numComponents])
+#test.pca = prcomp(test$x)
+test.pca=predict(train.pca,newdata = test$x)[,1:numComponents]
+
+model.naiveBayes <- naiveBayes(train2$y ~ ., data=train3) 
+summary(model.naiveBayes) 
+
+prediction.naiveBayes=predict(model.naiveBayes,newdata=test.pca)
+table(`Actual Class`=test$y,`Predicted Class`=prediction.naiveBayes)
+
+
+Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes))==test$y,na.rm=T)/length(prediction.naiveBayes==test$y)
+
+
+## Need method to visualise the predictions?? If this is possible.
