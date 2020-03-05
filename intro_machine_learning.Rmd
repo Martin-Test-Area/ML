@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction to Machine Learning: MNIST written character classification
 1.1 
 
-We can use machine learning to help solve many different types of problems. One problem machine learning can be useful in solving is the classification problem. This is the problem of identifying which set of categories a new observation belongs to. This has many useful applications in the real world such as classifying emails as either spam, or not spam. 
+We can use machine learning to help solve many different types of problems. One problem machine learning can be useful in solving is the classification problem. This is the problem of identifying which set of categories a new observation belongs to. This has many useful applications in the real world such as classifying emails as either spam, or not spam. Classification is a problem in supervised learning, this is where we have training dataset \x which corresponds to a set of outputs (our classifications). We then learn a function to go from our data \x to our target y(x)=t. We can then use this function with new test data to predict our new output
 
 
 
