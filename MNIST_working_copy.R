@@ -196,9 +196,9 @@ train.pca = prcomp(train$x)
 train2=train
 train2$y=as.factor(train2$y)
 train2[['n']]=NULL
-train3=as.data.frame(train.pca$x[,1:numComponents2])
+train3=as.data.frame(train.pca$x)#[,1:numComponents2])
 #test.pca = prcomp(test$x)
-test.pca=predict(train.pca,newdata = test$x)[,1:numComponents2]
+test.pca=predict(train.pca,newdata = test$x)#[,1:numComponents2]
 
 model.naiveBayes <- naiveBayes(train2$y ~ ., data=train3) 
 summary(model.naiveBayes) 

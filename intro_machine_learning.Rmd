@@ -2,7 +2,7 @@
 title: "report test"
 author: "Martin Duggan"
 date: "28/01/2020"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -94,12 +94,45 @@ P(C) is the *prior*, which is the proportion of data that have class C.
 P(D|C) is the likelihood, this is the probability of observating data point D given the class C.
 P(D) is the probability of the data occuring. This is a constant across classes and is not needed to calculate the relative probabilites.
 
-For this forumla to hold we make the assumption that features in the data are independent of each other given the class. This means each variable/dimension in the data is independent. This is often not the case, but the model can still give good predictions. In our model we know that this independence assumption isn't true because with handwriting if one pixel has a value, the pixels next door are more likely to have handwriting in. For our model to be accurate it's also important that training data is represenative of the class distribution, otherwise are P(C) (prior estimates) will be incorrect. In the graph below we can see that the prior estimates from the training dataset our close to the test data so this assumption holds.
+For this forumla to hold we make the assumption that features in the data are independent of each other given the class. This means each variable/dimension in the data is independent. This is often not the case, but the model can still give good predictions. In our model we know that this independence assumption isn't true because with handwriting if one pixel has a value, the pixels next door are more likely to have handwriting in. For our model to be accurate it's also important that training data is represenative of the overall class distribution, otherwise are P(C) (prior estimates) will be incorrect. In the graph below we can see that the prior estimates from the training dataset is close to the test data so this assumption holds.
+
 ![](NBayes.png)
 
+Before we create our model, we are going to use PCA on the data and reduce the components to 90%. This has a similar effect as KNN in terms of speeding the computation up but also has an additinal effect. By only taking the first 87 PCA dimensions, the correlation between dimensions should be lower. This is because of how PCA calculates it's principal components (note the more PCA dimensions included higher the correlation). When we created our model we used a 10-fold cross validation to make the model more compareable to the previous KNN model. This resulted in an accuracy of 88.42% (much lower than the previous 97.49%). When we look closer into the results we see that this model also mixers up similar classes (as KNN) such as 3 and 8, or 4 and 9.
+
+            Predicted Class
+Actual Class    0    1    2    3    4    5    6    7    8    9
+
+           0  935    0   14    0    1   13   15    1    1    0
+           
+           1    1 1080    7   16    3    6   10    3    7    2
+           
+           2   16    1  887   40    9    7   12   13   44    3
+           
+           3    3    0   34  870    4   35    5   16   27   16
+           
+           4    1    0   15    1  871    6   10    4    8   66
+           
+           5    7    0    8   58    1  765   11    4   30    8
+           
+           6    8    2   22    4   10   36  874    0    1    1
+           
+           7    4   16   32    4   26   13    5  868   11   49
+           
+           8   14    0   18   34    9   31    5    5  846   12
+           
+           9   14    3   23    9   59   19    1   31    4  846
 
 
 5.
+
+From our analysis we can conclude from our two tested models that K nearest neighbour with value of k=3 is our best model with an accuracy of 97.49% on our test data (compared to 88.42% from Naives Bayes). When comparing the accuracy to our cross validation plot it looks like we may have overfitted this model. It may be worth trying k=5+ in future models to check this hypothesis. It is worth mentioning that we performed PCA and reduced our data to 87 principal components.
+
+When we compare these error rates with ones already published (http://yann.lecun.com/exdb/mnist/) we can see the hightest accuracy rate is for a convolutional net with 99.77%, and the highest accuracy rate for a KNN method (with additional preprocessing) is 99.37%. The accuracy rate of these are a lot higher than the methods we have used, but they also have their cons. In the case of the convolution net, the computation needed to compute the model is expensive and the method used is complex and harder to explain to the laymen user. This is also similar for the KNN method, as the preprocessing used is shape context matching. Whilst the KNN method is simple (although computationally expensive) the method used to preprocess the data is complex and adds further computation.
+
+To determine which method is best suited for our problem we have to consider a range of factors. This includes error rate (accuracy), cost (computation time) and complexity. The cost and complexity is also important becuase some models can take an extremely long time and make the models infeisable to run. Complexity is also important because depending on the method used you may need to defend and explain the method you are using to the laymend user, this can be difficult for models such as neural networks.
+
+Some of the limits of the models we have implimented are in how we've trained our model. To improve this we should use the leave one out technique, but this also has the con that it is extremely computationally expensive to run. Another limitation with the naives bayes approach is the number of principal components used. This has been conditioned for the KNN rather than naives bayes, to look further into this we would want to look at correlation between each variable to calculate the best number of principal components for our analysis.
 
 
 ```{r code, eval=F,echo=T}
@@ -112,9 +145,6 @@ library(ggplot2)
 # No Scaling, this has issues as some dimensions don't have any variation
 train.pca = prcomp(train$x)
 # Following have too many dimensions to get any useful information out of
-#summary(train.pca)
-#plot(train.pca)
-#train.pca
 
 eigs = train.pca$sdev^2
 #calculate the cumulative probs
@@ -126,16 +156,20 @@ Cumulative=data.frame(
 plot(x=seq(1,28^2,1),y=Cumulative$Cumulative.Proportion,type="l")
 ggplot(Cumulative,aes(x=Dimensions,y=100*`Cumulative.Proportion`))+
   geom_line()+
-  geom_hline(yintercept = 80)+
+  geom_hline(yintercept = 70,linetype="dashed")+
+  geom_hline(yintercept = 80,linetype="dashed")+
+  geom_hline(yintercept = 90,linetype="dashed")+
+  geom_text(aes(x=26,y=80,label=paste("26")),col="red")+
+  geom_text(aes(x=26,y=75,label=paste("↓")),col="red")+
   geom_text(aes(x=44,y=90,label=paste("44")),col="red")+
-  #geom_text(aes(x=44,y=85,label=paste("|")),col="red")+
-  #geom_text(aes(x=44,y=82,label=paste("˅")),col="red")+
   geom_text(aes(x=44,y=85,label=paste("↓")),col="red")+
+  geom_text(aes(x=87,y=100,label=paste("87")),col="red")+
+  geom_text(aes(x=87,y=95,label=paste("↓")),col="red")+
   scale_y_continuous(breaks = seq(0,100,20))+
   labs(title = "PCA Dimension against proportion of varience explained",y="Cumulative Proportion (%)")+
   theme_bw()
 
-## We want the PCA eigen vectors to account for at least 80%
+  ## We want the PCA eigen vectors to account for at least 80%
 # Lowest number of dimensionsf for this is 44.
 numComponents=44 #80%
 numComponents2=87  # 90%
@@ -213,23 +247,9 @@ library(class)
 
 test.pca = prcomp(test$x) # Reduce test data into 44 dimensions
 
-knn_train=as.data.frame.array(train.pca$x[,1:numComponents]) # create train dataset with 44 dimension reduced variables from PCA 
+knn_train=as.data.frame.array(train.pca$x[,1:numComponents2]) # create train dataset with 44 dimension reduced variables from PCA 
 #knn_test=as.data.frame.array(test.pca$x[,1:numComponents]) # creat test dataset with 44 dimension reduced variables
-knn_test=predict(train.pca,newdata = test$x)[,1:numComponents]
-
-# Single test first
-results=knn(train = knn_train,test = knn_test,cl=train$y,k=5)
-100*sum(as.numeric(as.character(results))==test$y,na.rm=T)/length(results==test$y)
-table(`Actual Class` = test$y, `Predicted Class` = results)
-
-# Plot to see if histogram of results and real data is similar
-hist.knn=data.frame(
-  number=c(as.numeric(as.character(results)),as.numeric(test$y)),
-  type=c(rep("results",length(results)),rep("test data",length(test$y)))
-)
-ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()#+facet_grid(~type)
-
-# Need a way to find K!!!
+knn_test=predict(train.pca,newdata = test$x)[,1:numComponents2]
 
 
 # KNN with Caret ----------------------------------------------------------
@@ -238,7 +258,7 @@ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw
  
  knn_train$y=as.factor(train$y)
  
- model<- train(y~., data=knn_train, trControl=train_control, method="knn",tuneGrid   = expand.grid(k = 1:10))
+ model<- train(y~., data=knn_train, trControl=train_control, method="knn",tuneGrid   = expand.grid(k = seq(1,21,by=2)))
  
  plot(model)
  
@@ -252,16 +272,24 @@ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw
    number=c(as.numeric(as.character(resultscv)),as.numeric(test$y)),
    type=c(rep("results",length(resultscv)),rep("test data",length(test$y)))
  )
- ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()#+facet_grid(~type)
+ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()+scale_x_continuous(breaks = 0:9)
+ #+facet_grid(~type)
  
  
 
 # Next part.... -----------------------------------------------------------
 
+  
 library(e1071) 
 yTable=table(train$y)
-percentage=round(100*yTable/sum(yTable))
+percentage=round(100*yTable/sum(yTable),1)
 labels=paste0(row.names(yTable),"(",percentage,"%)")
+
+yTable1=table(test$y)
+percentage1=round(100*yTable1/sum(yTable1),1)
+labels1=paste0(row.names(yTable1),"(",percentage1,"%)")
+par(mfrow=c(1,2))
+pie(yTable1,labels=labels1,main="Total Number of Digits (test set)")
 pie(yTable,labels=labels,main="Total Number of Digits (training set)")
 
 train2=train
@@ -279,25 +307,26 @@ Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes))==test$y,na.rm=T
 
 
 ##   Now with PCA
+## Need method to visualise the predictions?? If this is possible.
+
+# redoing ~NaiveBayes -----------------------------------------------------
 
 train.pca = prcomp(train$x)
 
 train2=train
 train2$y=as.factor(train2$y)
 train2[['n']]=NULL
-train3=as.data.frame(train.pca$x[,1:numComponents])
+train3=as.data.frame(train.pca$x[,1:numComponents2])
 #test.pca = prcomp(test$x)
-test.pca=predict(train.pca,newdata = test$x)[,1:numComponents]
+test.pca=predict(train.pca,newdata = test$x)[,1:numComponents2]
 
-model.naiveBayes <- naiveBayes(train2$y ~ ., data=train3) 
-summary(model.naiveBayes) 
+model = train(train3,train2$y,'nb',trControl=trainControl(method='cv',number=10))
 
-prediction.naiveBayes=predict(model.naiveBayes,newdata=test.pca)
-table(`Actual Class`=test$y,`Predicted Class`=prediction.naiveBayes)
+prediction.naiveBayes=predict(model$finalModel,test.pca)
 
+table(`Actual Class`=test$y,`Predicted Class`=prediction.naiveBayes$class)
+#prediction.naiveBayes
 
-Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes))==test$y,na.rm=T)/length(prediction.naiveBayes==test$y)
+Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes$class))==test$y,na.rm=T)/length(prediction.naiveBayes$class==test$y)
 
-
-## Need method to visualise the predictions?? If this is possible.
 ```
