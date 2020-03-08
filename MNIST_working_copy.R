@@ -151,16 +151,28 @@ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw
    number=c(as.numeric(as.character(resultscv)),as.numeric(test$y)),
    type=c(rep("results",length(resultscv)),rep("test data",length(test$y)))
  )
- ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()#+facet_grid(~type)
+ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw()+scale_x_continuous(breaks = 0:9)
+ #+facet_grid(~type)
  
  
 
 # Next part.... -----------------------------------------------------------
 
+ plot(train$y)
+ hist(train$y)
+hist(test$y)
+
+  
 library(e1071) 
 yTable=table(train$y)
-percentage=round(100*yTable/sum(yTable))
+percentage=round(100*yTable/sum(yTable),1)
 labels=paste0(row.names(yTable),"(",percentage,"%)")
+
+yTable1=table(test$y)
+percentage1=round(100*yTable1/sum(yTable1),1)
+labels1=paste0(row.names(yTable1),"(",percentage1,"%)")
+par(mfrow=c(1,2))
+pie(yTable1,labels=labels1,main="Total Number of Digits (test set)")
 pie(yTable,labels=labels,main="Total Number of Digits (training set)")
 
 train2=train
@@ -184,9 +196,9 @@ train.pca = prcomp(train$x)
 train2=train
 train2$y=as.factor(train2$y)
 train2[['n']]=NULL
-train3=as.data.frame(train.pca$x[,1:numComponents])
+train3=as.data.frame(train.pca$x[,1:numComponents2])
 #test.pca = prcomp(test$x)
-test.pca=predict(train.pca,newdata = test$x)[,1:numComponents]
+test.pca=predict(train.pca,newdata = test$x)[,1:numComponents2]
 
 model.naiveBayes <- naiveBayes(train2$y ~ ., data=train3) 
 summary(model.naiveBayes) 
@@ -199,3 +211,25 @@ Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes))==test$y,na.rm=T
 
 
 ## Need method to visualise the predictions?? If this is possible.
+
+
+
+# redoing ~NaiveBayes -----------------------------------------------------
+
+train.pca = prcomp(train$x)
+
+train2=train
+train2$y=as.factor(train2$y)
+train2[['n']]=NULL
+train3=as.data.frame(train.pca$x[,1:numComponents2])
+#test.pca = prcomp(test$x)
+test.pca=predict(train.pca,newdata = test$x)[,1:numComponents2]
+
+model = train(train3,train2$y,'nb',trControl=trainControl(method='cv',number=10))
+
+prediction.naiveBayes=predict(model$finalModel,test.pca)
+
+table(`Actual Class`=test$y,`Predicted Class`=prediction.naiveBayes$class)
+#prediction.naiveBayes
+
+Accuracy=100*sum(as.numeric(as.character(prediction.naiveBayes$class))==test$y,na.rm=T)/length(prediction.naiveBayes$class==test$y)

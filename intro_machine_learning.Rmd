@@ -93,6 +93,12 @@ Where P(C|D) is the probability of the class (C) based on the data (D), which is
 P(C) is the *prior*, which is the proportion of data that have class C.
 P(D|C) is the likelihood, this is the probability of observating data point D given the class C.
 P(D) is the probability of the data occuring. This is a constant across classes and is not needed to calculate the relative probabilites.
+
+For this forumla to hold we make the assumption that features in the data are independent of each other given the class. This means each variable/dimension in the data is independent. This is often not the case, but the model can still give good predictions. In our model we know that this independence assumption isn't true because with handwriting if one pixel has a value, the pixels next door are more likely to have handwriting in. For our model to be accurate it's also important that training data is represenative of the class distribution, otherwise are P(C) (prior estimates) will be incorrect. In the graph below we can see that the prior estimates from the training dataset our close to the test data so this assumption holds.
+![](NBayes.png)
+
+
+
 5.
 
 
