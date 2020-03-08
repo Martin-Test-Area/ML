@@ -21,16 +21,20 @@ Cumulative=data.frame(
 plot(x=seq(1,28^2,1),y=Cumulative$Cumulative.Proportion,type="l")
 ggplot(Cumulative,aes(x=Dimensions,y=100*`Cumulative.Proportion`))+
   geom_line()+
-  geom_hline(yintercept = 80)+
+  geom_hline(yintercept = 70,linetype="dashed")+
+  geom_hline(yintercept = 80,linetype="dashed")+
+  geom_hline(yintercept = 90,linetype="dashed")+
+  geom_text(aes(x=26,y=80,label=paste("26")),col="red")+
+  geom_text(aes(x=26,y=75,label=paste("↓")),col="red")+
   geom_text(aes(x=44,y=90,label=paste("44")),col="red")+
-  #geom_text(aes(x=44,y=85,label=paste("|")),col="red")+
-  #geom_text(aes(x=44,y=82,label=paste("˅")),col="red")+
   geom_text(aes(x=44,y=85,label=paste("↓")),col="red")+
+  geom_text(aes(x=87,y=100,label=paste("87")),col="red")+
+  geom_text(aes(x=87,y=95,label=paste("↓")),col="red")+
   scale_y_continuous(breaks = seq(0,100,20))+
   labs(title = "PCA Dimension against proportion of varience explained",y="Cumulative Proportion (%)")+
   theme_bw()
 
-## We want the PCA eigen vectors to account for at least 80%
+  ## We want the PCA eigen vectors to account for at least 80%
 # Lowest number of dimensionsf for this is 44.
 numComponents=44 #80%
 numComponents2=87  # 90%
@@ -108,9 +112,9 @@ library(class)
 
 test.pca = prcomp(test$x) # Reduce test data into 44 dimensions
 
-knn_train=as.data.frame.array(train.pca$x[,1:numComponents]) # create train dataset with 44 dimension reduced variables from PCA 
+knn_train=as.data.frame.array(train.pca$x[,1:numComponents2]) # create train dataset with 44 dimension reduced variables from PCA 
 #knn_test=as.data.frame.array(test.pca$x[,1:numComponents]) # creat test dataset with 44 dimension reduced variables
-knn_test=predict(train.pca,newdata = test$x)[,1:numComponents]
+knn_test=predict(train.pca,newdata = test$x)[,1:numComponents2]
 
 # Single test first
 results=knn(train = knn_train,test = knn_test,cl=train$y,k=5)
@@ -133,7 +137,7 @@ ggplot(hist.knn,aes(number,fill=type))+geom_histogram(position="dodge")+theme_bw
  
  knn_train$y=as.factor(train$y)
  
- model<- train(y~., data=knn_train, trControl=train_control, method="knn",tuneGrid   = expand.grid(k = 1:10))
+ model<- train(y~., data=knn_train, trControl=train_control, method="knn",tuneGrid   = expand.grid(k = seq(1,21,by=2)))
  
  plot(model)
  
